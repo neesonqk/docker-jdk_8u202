@@ -1,15 +1,9 @@
 FROM saorikido/docker-alpine_3.11.3-glibc:latest
 
 LABEL maintainer="neesonqk@gmail.com"
+# Java 8u202 as dependency
 
-# Add Java 8u202 as dependency
-
-# Copy JDK file
-COPY jdk-8u202-linux-x64.tar.gz /opt/jdk-8u202-linux-x64.tar.gz
-
-# Add Java 8u202 as dependency
 ENV JAVA_HOME="/usr/lib/jvm/default-jvm"
-
 # Copy JDK file
 COPY jdk-8u202-linux-x64.tar.gz /opt/jdk-8u202-linux-x64.tar.gz
 
