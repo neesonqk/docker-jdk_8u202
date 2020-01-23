@@ -16,10 +16,9 @@ COPY jdk-8u202-linux-x64.tar.gz /opt/jdk-8u202-linux-x64.tar.gz
 RUN mkdir -p /usr/lib/jvm && \
     tar -xvzf /opt/jdk-8u202-linux-x64.tar.gz -C /usr/lib/jvm/ && \
     ln -s "/usr/lib/jvm/jdk1.8.0_202" "${JAVA_HOME}" && \
-    ln -s "$JAVA_HOME/bin/"* "/usr/bin/"
-
-RUN rm /opt/jdk-8u202-linux-x64.tar.gz
-RUN rm -rf "$JAVA_HOME/"*src.zip && \
+    ln -s "$JAVA_HOME/bin/"* "/usr/bin/" && \
+    rm /opt/jdk-8u202-linux-x64.tar.gz && \
+    rm -rf "$JAVA_HOME/"*src.zip && \
     rm -rf "$JAVA_HOME/lib/missioncontrol" \
            "$JAVA_HOME/lib/visualvm" \
            "$JAVA_HOME/lib/"*javafx* \
@@ -52,14 +51,16 @@ RUN rm -rf "$JAVA_HOME/"*src.zip && \
            "$JAVA_HOME/jre/lib/ext/nashorn.jar" \
            "$JAVA_HOME/jre/lib/jfr.jar" \
            "$JAVA_HOME/jre/lib/jfr" \
-           "$JAVA_HOME/jre/lib/oblique-fonts"
-
-RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip
-RUN wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
+           "$JAVA_HOME/jre/lib/oblique-fonts" && \
+    apk add --no-cache --virtual=build-dependencies wget ca-certificates unzip &&\
+    wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
         "http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip" && \
     unzip -jo -d "${JAVA_HOME}/jre/lib/security" "jce_policy-8.zip" && \
-    rm "${JAVA_HOME}/jre/lib/security/README.txt"
-
-RUN apk del build-dependencies
+    rm "${JAVA_HOME}/jre/lib/security/README.txt" && \
+    \
+    apk del wget && \
+    apk del unzip && \
+    apk del ca-certificates && \
+    apk del build-dependencies
 
 CMD ["sh", "-c", "java -version" ]
